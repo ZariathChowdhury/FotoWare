@@ -1,0 +1,11 @@
+﻿{
+  "login_form_css": "form#login-form-page",
+  "username_css": "input#username-page",
+  "password_css": "input#password-page",
+  "login_button_css": "button#page-form-submit",
+  "archive_css": "a#archivesLink",
+  "search_input_id": "mainSearchField",
+  "search_button_css": "span#mainSearchButton",
+  "search_for_css": "div.breadcrumb-wrapper"
+
+}

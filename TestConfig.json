@@ -1,0 +1,10 @@
+﻿{
+  "login_url": "https://recruitment.fotoware.cloud/fotoweb/views/login",
+  "username": "<username>",
+  "password": "<password>",
+  "keyword": "peter",
+  "API_id": "<api_id>",
+  "API_secret": "<api_secret>",
+  "auth_url": "https://myfotowebserver.com/fotoweb/oauth2/token",
+  "search_url": "/fotoweb/archives/"
+}
