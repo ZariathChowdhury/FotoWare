@@ -24,10 +24,6 @@ namespace FotoWare
                 .AddJsonFile("TestConfig.json")
                 .Build();
 
-        // TestConfig.json contains Test Configuration Data
-        IConfigurationRoot response = new ConfigurationBuilder()
-                .AddJsonFile("response.json")
-                .Build();
 
         [Test]
         public string GetAuthToken()
