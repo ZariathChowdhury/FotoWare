@@ -11,6 +11,7 @@ namespace FotoWare
     public class Test2
     {
         int number = 0;
+        string token;
         List<string> searchUrls = new List<string>();
 
 
@@ -26,7 +27,7 @@ namespace FotoWare
 
 
         [Test]
-        public string GetAuthToken()
+        public void GetAuthToken()
         {
             var client = new RestClient(TestConfig["auth_url"]);
             var request = new RestRequest(Method.POST);
@@ -37,12 +38,12 @@ namespace FotoWare
             request.AddParameter("client_secret", TestConfig["API_secret"]);
 
             IRestResponse response = client.Execute(request);
-            Console.WriteLine(response.Content);
+            TestContext.Progress.WriteLine("Starting TEST 2... ");
+            TestContext.Progress.WriteLine("Get Auth Response :" + response.Content);
 
             JObject joResponse = JObject.Parse(response.Content);
-            string token = joResponse.GetValue("token").ToString();
-            Console.WriteLine(token);
-            return token;
+            token = joResponse.GetValue("access_token").ToString();
+            TestContext.Progress.WriteLine("Token is: " + token);
 
         }
 
@@ -56,19 +57,22 @@ namespace FotoWare
         [Test]
         public void Search()
         {
-            var client = new RestClient(TestConfig["search_url"]);
+            var client = new RestClient(
+                TestConfig["search_url"]+TestConfig["keyword"]
+                );
             var request = new RestRequest(Method.GET);
+            request.AddHeader("Content-Type",
+                "application/vnd.fotoware.collectionlist+json");
+           
+            request.AddHeader("Cookie", "FotoWebVersion=bdf8e2bb-c60e-4c12-b441-2156f0171049");
+            request.AddHeader("Cookie", "mp_508f8100a814a68a076eaa38916099f4_mixpanel=%7B%7D");
+            request.AddHeader("Cookie", "SessionToken="+token);
+            request.AddHeader("Content-Type", "application/vnd.fotoware.collectionlist+json");
+           
+            IRestResponse searchResponse = client.Execute(request);
+            TestContext.Progress.WriteLine("Search query response : " + searchResponse.Content);
 
-            string token = GetAuthToken();
-
-            request.AddHeader("token", token);
-            request.AddParameter(
-                "q="+TestConfig["keyword"],
-                ParameterType.RequestBody);
-
-            IRestResponse response = client.Execute(request);
-
-            JArray dataArray = JArray.Parse(response.Content);
+            JArray dataArray = JArray.Parse(searchResponse.Content);
 
             IList<Data> dataObjects = dataArray.Select(p => new Data
             {
@@ -84,7 +88,7 @@ namespace FotoWare
                     searchUrls.Add(item.searchURL);
                 }
             }
-            Console.WriteLine("Number of Archive with assetCount 1: " + number);
+            TestContext.Progress.WriteLine("Number of Archive with assetCount 1: " + number);
 
             
         }
@@ -97,12 +101,12 @@ namespace FotoWare
             for (var i = 0; i < searchUrls.Count; i++)
             {
                 var client = new RestClient(searchUrls[i]);
-                request.AddHeader("Accept", "application/vnd.twitter-v1+json");
+                request.AddHeader("Accept", "pplication/vnd.fotoware.assetlist+json");
                 IRestResponse response = client.Execute(request);
                 JObject resp = JObject.Parse(response.Content);
                 var data = JObject.Parse(resp.ToString());
                 var result = data[0];
-                Console.WriteLine("First object in rendered array: "+ data[0]);
+                TestContext.Progress.WriteLine("First object in rendered array: "+ data[0]);
             }
 
         }

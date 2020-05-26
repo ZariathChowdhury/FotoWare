@@ -68,7 +68,8 @@ namespace FotoWare
 
             // Go to login url
             driver.Url = TestConfig["login_url"];
-            Console.WriteLine("Navigating to: " + driver.Url);
+            TestContext.Progress.WriteLine("Starting TEST 1... ");
+            TestContext.Progress.WriteLine("Navigating to: " + driver.Url);
 
             wait.Until(
                 WaitHelpers.
@@ -80,7 +81,7 @@ namespace FotoWare
                     )
                 );
 
-            Console.WriteLine("Login Form Loaded");
+            TestContext.Progress.WriteLine("Login Form Loaded");
 
             // Enter Username
             driver.PageSource.Contains(PageProperties["username_css"]);
@@ -90,7 +91,7 @@ namespace FotoWare
                     )
                 );
             username.SendKeys(TestConfig["username"]);
-            Console.WriteLine("Entered Username.");
+            TestContext.Progress.WriteLine("Entered Username.");
 
             // Enter Password
             driver.PageSource.Contains(PageProperties["password_css"]);
@@ -100,7 +101,7 @@ namespace FotoWare
                     )
                 );
             password.SendKeys(TestConfig["password"]);
-            Console.WriteLine("Entered Password.");
+            TestContext.Progress.WriteLine("Entered Password.");
 
             // Click Login
             driver.PageSource.Contains(PageProperties["login_button_css"]);
@@ -110,7 +111,7 @@ namespace FotoWare
                     )
                 );
             loginButton.Click();
-            Console.WriteLine("Clicked Login Button.");
+            TestContext.Progress.WriteLine("Clicked Login Button.");
 
             // Click Archive
             IWebElement archive = wait.Until(
@@ -123,7 +124,7 @@ namespace FotoWare
                     )
                 );
             archive.Click();
-            Console.WriteLine("Clicked on Archive.");
+            TestContext.Progress.WriteLine("Clicked on Archive.");
 
             // Enter Search Keyword
             IWebElement searchInput = wait.Until(
@@ -137,7 +138,7 @@ namespace FotoWare
                 );
             searchInput.SendKeys(TestConfig["keyword"]);
             searchInput.SendKeys(Keys.Enter);
-            Console.WriteLine("Entered Search Keyword.");
+            TestContext.Progress.WriteLine("Entered Search Keyword.");
 
             wait.Until(WaitHelpers.ExpectedConditions
                 .UrlContains(TestConfig["keyword"]));
@@ -148,7 +149,7 @@ namespace FotoWare
                 path+"/test.png",
                 OpenQA.Selenium.ScreenshotImageFormat.Png
                 );
-            Console.WriteLine("Saved Screenshot.");
+            TestContext.Progress.WriteLine("Saved Screenshot.");
         }
     }
 }
